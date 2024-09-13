@@ -12,3 +12,41 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String
+  email        String        @unique
+  availabilities Availability[]
+  slots        Slot[]        // Relation to slots
+  createdAt    DateTime      @default(now())
+}
+
+model Availability {
+  id          Int       @id @default(autoincrement())
+  userId      Int       // Relation field (indexed via composite index below)
+  user        User      @relation(fields: [userId], references: [id])
+  date        DateTime  // Store availability for a specific date
+  isAvailable Boolean   @default(true)  // Whether the user is available on this date
+  createdAt   DateTime  @default(now())
+
+  // Composite index on userId and date
+  @@index([userId, date], name: "user_date_idx")
+}
+
+model Slot {
+  id          Int       @id @default(autoincrement())
+  userId      Int       // Relation field (indexed via composite index below)
+  user        User      @relation(fields: [userId], references: [id])
+  date        DateTime  // The date for which the slot is available
+  startTime   String    // Slot start time in 24-hour format, e.g., "08:00"
+  endTime     String    // Slot end time in 24-hour format, e.g., "09:00"
+  available   Boolean   @default(true)  // Is this slot available?
+  isDeleted   Boolean   @default(false) // Soft delete flag for the slot
+  createdAt   DateTime  @default(now())
+
+  // Composite index on userId, date, and startTime for fast querying
+  @@index([userId, date, startTime], name: "user_date_startTime_idx")
+}
+
