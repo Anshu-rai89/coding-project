@@ -62,10 +62,13 @@ export const findScheduleOverlap = async (userId1: number, userId2: number, date
 
     user1Slots.forEach(slot1 => {
         user2Slots.forEach(slot2 => {
-            const overlap = findSlotOverlap(slot1, slot2);
-            if (overlap) {
-                overlapSlots.push(overlap);
-            }
+
+            if(slot1.available && slot2.available) {
+                const overlap = findSlotOverlap(slot1, slot2);
+                if (overlap) {
+                    overlapSlots.push(overlap);
+                }
+            }  
         });
     });
 
