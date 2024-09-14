@@ -1,4 +1,15 @@
-# Calendar Availability API
+# Calendar API
+
+## [PROD] API Base URL 
+ https://coding-project-9f39.onrender.com/api/v1/
+
+## Features
+- User registration with customizable timezone, slot duration, and working hours.
+- Users can create availability for any future date with defined slots (1 hour, 30 minutes, or 15 minutes).
+
+- API to retrieve availability and slots for a specific user.
+
+- API to find overlapping availability slots between two users on a given day.
 
 ## Overview
 

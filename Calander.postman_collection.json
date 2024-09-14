@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"email\": \"anshu@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"Anshu_Rai\",\n  \"timeZone\": \"UTC\",\n  \"slotDuration\": 15,\n  \"dayStartTime\": \"10:00\",\n  \"dayEndTime\": \"17:00\"\n}\n",
+					"raw": "{\n  \"email\": \"anshu1@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"Ankit\",\n  \"timeZone\": \"UTC\",\n  \"slotDuration\": 30,\n  \"dayStartTime\": \"09:00\",\n  \"dayEndTime\": \"19:00\"\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -27,12 +27,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/v1/register",
-					"protocol": "http",
+					"raw": "https://coding-project-9f39.onrender.com/api/v1/register",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"coding-project-9f39",
+						"onrender",
+						"com"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"v1",
@@ -63,17 +64,18 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/v1/users/1/availability",
-					"protocol": "http",
+					"raw": "https://coding-project-9f39.onrender.com/api/v1/users/2/availability",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"coding-project-9f39",
+						"onrender",
+						"com"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"v1",
 						"users",
-						"1",
+						"2",
 						"availability"
 					]
 				}
@@ -86,12 +88,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/users/2/availability?date=2024-09-15",
-					"protocol": "http",
+					"raw": "https://coding-project-9f39.onrender.com/api/v1/users/2/availability?date=2024-09-15",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"coding-project-9f39",
+						"onrender",
+						"com"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"v1",
@@ -115,17 +118,18 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/users/2/calendar",
-					"protocol": "http",
+					"raw": "https://coding-project-9f39.onrender.com/api/v1/users/1/calendar",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"coding-project-9f39",
+						"onrender",
+						"com"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"v1",
 						"users",
-						"2",
+						"1",
 						"calendar"
 					]
 				}
@@ -138,12 +142,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/users/2/availability/overlap/1?date=2024-09-15",
-					"protocol": "http",
+					"raw": "https://coding-project-9f39.onrender.com/api/v1/users/2/availability/overlap/1?date=2024-09-15",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"coding-project-9f39",
+						"onrender",
+						"com"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"v1",
