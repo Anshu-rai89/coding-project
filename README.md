@@ -1,7 +1,8 @@
 # Calendar API
 
 ## [PROD] API Base URL 
- https://coding-project-9f39.onrender.com/api/v1/
+ https://coding-project-9f39.onrender.com/api/v1/ 
+ Note: In case of 502 retry after 50s (Free version limitation)
 
 ## Features
 - User registration with customizable timezone, slot duration, and working hours.
