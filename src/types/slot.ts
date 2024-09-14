@@ -1,10 +1,13 @@
 export interface Slot {
+    id: number,
     userId: number,
-    date: string,
-    isAvailable: boolean,
+    date: Date,
+    available: boolean,
     startTime: string,
     endTime: string,
-    slotDuration: number
+    isDeleted: boolean,
+    availabilityId: number,
+    createdAt: Date,
 }
 
 export interface OverlapSlot {

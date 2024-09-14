@@ -49,9 +49,16 @@ export const registerUser = async (request: FastifyRequest, reply: FastifyReply)
             },
         });
 
-        delete user.password;
         // Respond with success
-        reply.status(201).send({ message: 'User registered successfully', user});
+        reply.status(201).send({ 
+            message: 'User registered successfully', 
+            name: user.name,
+            email: user.email,
+            userId: user.id,
+            slotDuration: user.slotDuration,
+            dayStartTime: user.dayStartTime,
+            dayEndTime: user.dayEndTime
+        });
     } catch (error) {
         console.log("error", error);
         reply.status(500).send({ error: 'Failed to register user' });

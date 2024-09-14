@@ -1,38 +1,80 @@
-# Harbor Take Home Project
+# Calendar Availability API
 
-Welcome to the Harbor take home project. We hope this is a good opportunity for you to showcase your skills.
+## Overview
 
-## The Challenge
+This is a Fastify-based API built using TypeScript, Prisma, and PostgreSQL. The API allows users to set their availability in slots for each day, view their availability, and find overlapping availability slots between two users.
 
-Build us a REST API for calendly. Remember to support
+## Tech Stack
 
-- Setting own availability
-- Showing own availability
-- Finding overlap in schedule between 2 users
+- **Framework**: Fastify
+- **Language**: TypeScript
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **Containerization**: Docker
 
-It is up to you what else to support.
+### Prerequisites
 
-## Expectations
+- [Docker](https://www.docker.com/get-started) installed and running
+- [Docker Compose](https://docs.docker.com/compose/install/) installed
 
-We care about
+## Getting Started
 
-- Have you thought through what a good MVP looks like? Does your API support that?
-- What trade-offs are you making in your design?
-- Working code - we should be able to pull and hit the code locally. Bonus points if deployed somewhere.
-- Any good engineer will make hacks when necessary - what are your hacks and why?
+### 1. Clone the Repository
 
-We don't care about
+```bash
+git clone https://github.com/your-username/availability-api.git
+cd availability-api
 
-- Authentication
-- UI
-- Perfection - good and working quickly is better
+```
 
-It is up to you how much time you want to spend on this project. There are likely diminishing returns as the time spent goes up.
+### 2. Build and Start the Docker Containers
+Build the Docker images and start the containers using Docker Compose
 
-## Submission
+```bash
+docker-compose up --build
 
-Please fork this repository and reach out to Prakash when finished.
+```
 
-## Next Steps
 
-After submission, we will conduct a 30 to 60 minute code review in person. We will ask you about your thinking and design choices.
+# API Documentation
+
+## Overview
+
+This document provides an overview of the available API endpoints for managing user registrations, availability, and scheduling. The API is built using Fastify, TypeScript, Prisma, and PostgreSQL.
+
+## Base URL
+
+The base URL for all API endpoints is: http://127.0.0.1:8000/api/v1
+
+## User API
+
+### Register User
+
+- **Endpoint**: `POST /user/register`
+
+## Calender API
+
+### Get user calender
+
+- **Endpoint**: `GET users/:userId/calendar`
+
+## Availability API
+
+### Get user availability for day
+
+- **Endpoint**: `GET users/:userId/availability`
+
+### Create user availability for a day
+
+- **Endpoint**: `POST users/:userId/availability`
+
+### Find overlap in availability for two user
+
+- **Endpoint**: `GET users/:userId1/availability/overlap/userId2`
+
+
+
+
+
+
+
