@@ -1,7 +1,7 @@
 
 import { PrismaClient } from '@prisma/client';
 import { Slot,OverlapSlot } from '../types/slot';
-import { findSlotOverlap } from '../utils/slotUtils';
+import { isSubset } from '../utils/slotUtils';
 
 
 const prisma = new PrismaClient();
@@ -63,11 +63,9 @@ export const findScheduleOverlap = async (userId1: number, userId2: number, date
     user1Slots.forEach(slot1 => {
         user2Slots.forEach(slot2 => {
 
-            if(slot1.available && slot2.available) {
-                const overlap = findSlotOverlap(slot1, slot2);
-                if (overlap) {
-                    overlapSlots.push(overlap);
-                }
+            if(slot1.available && slot2.available && isSubset(slot2, slot1)) {
+                
+                    overlapSlots.push({startTime: slot2.startTime, endTime: slot2.endTime});
             }  
         });
     });

@@ -37,21 +37,15 @@ const formatTime = (date: Date) => {
 
 
 // Helper function to find overlap between two time slots
-export function findSlotOverlap(slot1: Slot, slot2: Slot): OverlapSlot | null {
-    const start1 = timeStringToMinutes(slot1.startTime);
-    const end1 = timeStringToMinutes(slot1.endTime);
-    const start2 = timeStringToMinutes(slot2.startTime);
-    const end2 = timeStringToMinutes(slot2.endTime);
-
-    const overlapStart = Math.max(start1, start2);
-    const overlapEnd = Math.min(end1, end2);
-
-    if (overlapStart < overlapEnd) {
-        return {
-            startTime: minutesToTimeString(overlapStart),
-            endTime: minutesToTimeString(overlapEnd),
-        };
-    }
-
-    return null;
+/**
+ * Check if slot1 is a subset of slot2.
+ * @param slot1 - First slot to check
+ * @param slot2 - Second slot to compare with
+ * @returns boolean - True if slot1 is a subset of slot2
+ */
+export function isSubset(slot1: Slot, slot2: Slot): boolean {
+    return (
+        slot1.startTime >= slot2.startTime &&
+        slot1.endTime <= slot2.endTime
+    );
 }
