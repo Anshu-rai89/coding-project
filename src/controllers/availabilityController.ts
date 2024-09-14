@@ -68,11 +68,11 @@ export const getScheduleOverlap = async (request: FastifyRequest, reply: Fastify
     try {
 
        const user1 = await prisma.user.findUnique({
-            where: { id: userId1 },
+            where: { id: parseInt(userId1) },
         });
 
         const user2 = await prisma.user.findUnique({
-            where: { id: userId2 },
+            where: { id: parseInt(userId2) },
         });
 
         if (!user1 || !user2) {
@@ -86,6 +86,7 @@ export const getScheduleOverlap = async (request: FastifyRequest, reply: Fastify
 
         reply.status(200).send({ overlaps: overlapSlots });
     } catch (error) {
+        console.log("eror", error);
         reply.status(500).send({ error: 'Failed to fetch schedule overlap' });
     }
 };
