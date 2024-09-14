@@ -22,8 +22,8 @@ This is a Fastify-based API built using TypeScript, Prisma, and PostgreSQL. The 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/availability-api.git
-cd availability-api
+git clone https://github.com/Anshu-rai89/coding-project.git
+cd coding-project
 
 ```
 
