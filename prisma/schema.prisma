@@ -18,13 +18,14 @@ model User {
   name         String
   availabilities Availability[]
   slots        Slot[]        // Relation to slots
-  email        String    @unique
-  timeZone     String    // User's preferred time zone
-  timeFormat   String    // 12-hour or 24-hour time format
-  slotDuration Int       // Slot duration in minutes (e.g., 60 for 1 hour, 30 for 30 mins)
-  dayStartTime String    // Start of the day in 24-hour format (e.g., "08:00")
-  dayEndTime   String    // End of the day in 24-hour format (e.g., "18:00")
-  createdAt    DateTime  @default(now())
+  email         String   @unique
+  password      String
+  timeZone      String   @default("UTC")         // Default time zone
+  slotDuration  Int      @default(60)            // Default slot duration (in minutes)
+  dayStartTime  String   @default("08:00")       // Default day start time (24-hour format)
+  dayEndTime    String   @default("17:00")       // Default day end time (24-hour format)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 
@@ -35,9 +36,11 @@ model Availability {
   date        DateTime  // Store availability for a specific date
   isAvailable Boolean   @default(true)  // Whether the user is available on this date
   createdAt   DateTime  @default(now())
+   slots       Slot[]   @relation("AvailabilitySlots")
 
   // Composite index on userId and date
   @@index([userId, date], name: "user_date_idx")
+  @@unique([userId, date]) 
 }
 
 model Slot {
@@ -50,8 +53,12 @@ model Slot {
   available   Boolean   @default(true)  // Is this slot available?
   isDeleted   Boolean   @default(false) // Soft delete flag for the slot
   createdAt   DateTime  @default(now())
+  availability Availability @relation("AvailabilitySlots", fields: [availabilityId], references: [id])
+  availabilityId Int
 
   // Composite index on userId, date, and startTime for fast querying
   @@index([userId, date, startTime], name: "user_date_startTime_idx")
+  @@unique([userId, date, startTime, endTime])
+  @@unique([availabilityId, startTime, endTime]) 
 }
 
