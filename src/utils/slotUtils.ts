@@ -39,7 +39,7 @@ export function isSubset(slot1: Slot, slot2: Slot): boolean {
 export function mergeSlots(slots: Slot[]): { startTime: number, endTime: number }[] {
     if (slots.length === 0) return [];
 
-    const sortedSlots = slots
+    const sortedSlots = slots.filter(slot => slot.available)
         .map(slot => ({
             startTime: timeStringToMinutes(slot.startTime),
             endTime: timeStringToMinutes(slot.endTime),
