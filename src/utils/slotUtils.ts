@@ -1,5 +1,5 @@
 import { Slot, OverlapSlot } from "../types/slot";
-import { timeStringToMinutes, minutesToTimeString } from ".";
+import { timeStringToMinutes, minutesToTimeString,formatTime, addMinutes, parseTime } from ".";
 
 export const generateSlots = (startTime: string, endTime: string, slotDuration: number) => {
     const slots = [];
@@ -20,20 +20,6 @@ export const generateSlots = (startTime: string, endTime: string, slotDuration: 
     return slots;
 };
 
-const parseTime = (timeStr: string) => {
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    return new Date(0, 0, 0, hours, minutes);
-};
-
-const addMinutes = (date: Date, minutes: number) => {
-    return new Date(date.getTime() + minutes * 60000);
-};
-
-const formatTime = (date: Date) => {
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${hours}:${minutes}`;
-};
 
 
 // Helper function to find overlap between two time slots
@@ -48,4 +34,82 @@ export function isSubset(slot1: Slot, slot2: Slot): boolean {
         slot1.startTime >= slot2.startTime &&
         slot1.endTime <= slot2.endTime
     );
+}
+
+export function mergeSlots(slots: Slot[]): { startTime: number, endTime: number }[] {
+    if (slots.length === 0) return [];
+
+    const sortedSlots = slots
+        .map(slot => ({
+            startTime: timeStringToMinutes(slot.startTime),
+            endTime: timeStringToMinutes(slot.endTime),
+        }))
+        .sort((a, b) => a.startTime - b.startTime);
+
+    const mergedRanges = [];
+    let currentRange = { startTime: sortedSlots[0].startTime, endTime: sortedSlots[0].endTime };
+
+    for (let i = 1; i < sortedSlots.length; i++) {
+        const slot = sortedSlots[i];
+
+        // If the current slot overlaps or is adjacent to the current range, merge them
+        if (slot.startTime <= currentRange.endTime) {
+            currentRange.endTime = Math.max(currentRange.endTime, slot.endTime);
+        } else {
+            // Push the merged range and convert back to 'HH:mm' format
+            mergedRanges.push({
+                startTime: currentRange.startTime,
+                endTime: currentRange.endTime,
+            });
+
+            currentRange = { startTime: slot.startTime, endTime: slot.endTime };
+        }
+    }
+
+    // Push the last merged range
+    mergedRanges.push({
+        startTime: currentRange.startTime,
+        endTime: currentRange.endTime,
+    });
+
+    return mergedRanges;
+}
+
+export function calculateRangeOverlap(
+    user1Slots: Slot[],
+    user2Slots: Slot[]
+): OverlapSlot[] {
+    // Merge slots for both users to get their continuous availability ranges
+    const user1Ranges = mergeSlots(user1Slots);
+    const user2Ranges = mergeSlots(user2Slots);
+
+    const overlapRanges = [];
+
+    // Compare ranges for both users to find the overlap
+    let i = 0;
+    let j = 0;
+
+    while (i < user1Ranges.length && j < user2Ranges.length) {
+        const range1 = user1Ranges[i];
+        const range2 = user2Ranges[j];
+
+        const startOverlap = Math.max(range1.startTime, range2.startTime);
+        const endOverlap = Math.min(range1.endTime, range2.endTime);
+
+        if (startOverlap < endOverlap) {
+            overlapRanges.push({
+                startTime: minutesToTimeString(startOverlap),
+                endTime: minutesToTimeString(endOverlap),
+            });
+        }
+
+        // Move to the next range depending on which one ends first
+        if (range1.endTime < range2.endTime) {
+            i++;
+        } else {
+            j++;
+        }
+    }
+
+    return overlapRanges;
 }

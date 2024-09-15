@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { upsertAvailabilityWithSlots } from '../services/slotService';
-import { getAvailabilityWithSlots,findScheduleOverlap } from '../services/availablity';
+import { getAvailabilityWithSlots, findMergedAvailabilityOverlaps } from '../services/availablity';
 
 const prisma = new PrismaClient();
 
@@ -78,7 +78,7 @@ export const getScheduleOverlap = async (request: FastifyRequest, reply: Fastify
         if (!user1 || !user2) {
             return reply.status(404).send({ error: 'User not found' });
         }
-        const overlapSlots = await findScheduleOverlap(parseInt(userId1), parseInt(userId2), date);
+        const overlapSlots = await findMergedAvailabilityOverlaps(parseInt(userId1), parseInt(userId2), new Date(date));
 
         if (overlapSlots.length === 0) {
             return reply.status(200).send({ message: 'No overlapping slots found', overlaps: [] });

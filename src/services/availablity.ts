@@ -1,7 +1,7 @@
 
 import { PrismaClient } from '@prisma/client';
-import { Slot,OverlapSlot } from '../types/slot';
-import { isSubset } from '../utils/slotUtils';
+import { Slot } from '../types/slot';
+import { calculateRangeOverlap } from '../utils/slotUtils';
 
 
 const prisma = new PrismaClient();
@@ -32,46 +32,26 @@ export const getAvailabilityWithSlots = async (userId: number, date: string) => 
 };
 
 
-// Function to get slots for a user on a specific date
-async function getUserSlots(userId: number, date: string): Promise<Slot[]> {
-    const availability = await prisma.availability.findUnique({
-        where: {
-            userId_date: {
-                userId,
-                date: date ? new Date(date): new Date(Date.now()),
-            },
-        },
-        include: {
-            slots: {
-                orderBy: {
-                    startTime: 'asc',
-                },
-            },
-        },
-    });
+export async function findMergedAvailabilityOverlaps(userId1: number, userId2: number, date: Date) {
+    // Fetch availability and slots for both users on the specified date
+    const [availability1, availability2] = await Promise.all([
+        prisma.availability.findUnique({
+            where: { userId_date: { userId: userId1, date } },
+            include: { slots: true },
+        }),
+        prisma.availability.findUnique({
+            where: { userId_date: { userId: userId2, date } },
+            include: { slots: true },
+        }),
+    ]);
 
-    return availability ? availability.slots : [];
+    // If either user is not available on this day, return an empty array
+    if (!availability1?.isAvailable || !availability2?.isAvailable) {
+        return [];
+    }
+
+    return calculateRangeOverlap(availability1.slots, availability2.slots);
 }
-
-// Function to find overlaps between two users' slots
-export const findScheduleOverlap = async (userId1: number, userId2: number, date: string): Promise<OverlapSlot[]> => {
-    const user1Slots = await getUserSlots(userId1, date);
-    const user2Slots = await getUserSlots(userId2, date);
-
-    const overlapSlots: OverlapSlot[] = [];
-
-    user1Slots.forEach(slot1 => {
-        user2Slots.forEach(slot2 => {
-
-            if(slot1.available && slot2.available && isSubset(slot2, slot1)) {
-                
-                    overlapSlots.push({startTime: slot2.startTime, endTime: slot2.endTime});
-            }  
-        });
-    });
-
-    return overlapSlots;
-};
 
 
 
